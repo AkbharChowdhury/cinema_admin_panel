@@ -1,7 +1,6 @@
 from typing_extensions import TypedDict, ReadOnly
 
-import databases.db
-from databases.db import Database
+from db import Database
 from models.genres import Genre
 import operator
 

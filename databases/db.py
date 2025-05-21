@@ -3,18 +3,9 @@ from psycopg2 import connect
 from psycopg2.extras import DictCursor
 from databases.config import load_config
 from models.genres import Genre, MovieGenre
-import io
 
 
-class MyDatabase:
-    def __str__(self):
-        sb = io.StringIO()
-        sb.write('All movies \n')
-        db = MyDatabase()
-        movies = db.fetch_movies()
-        for row in movies:
-            sb.write(f'{row['title']} , {row['genres']}\n')
-        return sb.getvalue()
+class Database:
 
     def add_movie_and_genres(self, title: str, genre_id_list: set[int]) -> None:
         with connect(**load_config()) as conn, conn.cursor() as cur:
@@ -65,5 +56,5 @@ class MyDatabase:
 
 
 if __name__ == '__main__':
-    db = MyDatabase()
+    db = Database()
     print(db.fetch_all_genres())

@@ -6,11 +6,12 @@ from PyQt6.QtWidgets import (QApplication, QMainWindow, QWidget, QVBoxLayout, QL
                              )
 
 from forms import admin_panel
+from forms.run_app import RunApp
 from models.enter_key import EnterAction
 from models.genres import Genre
 from models.form_validation import AddMovieFormValidation
 from models.messageboxes import MyMessageBox
-from databases.db import MyDatabase
+from databases.db import Database
 from models.window import Window
 
 
@@ -22,7 +23,7 @@ class AddMovieForm(QMainWindow):
 
     def __init__(self):
         super().__init__()
-        self.db = MyDatabase()
+        self.db = Database()
         self.my_window = Window()
         self.setWindowTitle("add movie".title())
         central_widget = QWidget()
@@ -56,19 +57,11 @@ class AddMovieForm(QMainWindow):
         EnterAction.enter(evt, self.movie_button_action)
 
 
-class RunApp:
-    @staticmethod
-    def run():
-        app = QApplication(sys.argv)
-        window = AddMovieForm()
-        window.show()
-        sys.exit(app.exec())
+
 
 
 def main():
-    db = MyDatabase()
-    RunApp.run()
-
+    RunApp.run(AddMovieForm)
 
 if __name__ == '__main__':
     main()

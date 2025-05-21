@@ -1,24 +1,16 @@
-import sys
-
 from PyQt6.QtGui import QKeyEvent
-from PyQt6.QtWidgets import (QApplication,
-                             QMainWindow,
-                             QWidget,
-                             QVBoxLayout,
-                             QLabel,
-                             QPushButton,
-                             QLineEdit, QMessageBox
-                             )
+from PyQt6.QtWidgets import (QApplication, QMainWindow, QWidget, QVBoxLayout, QLabel, QPushButton, QLineEdit,
+                             QMessageBox)
 
+from databases.db import Database
 from forms import admin_panel
+from forms.run_app import RunApp
 from models.enter_key import EnterAction
-from models.genres import Genre
-from models.movie_info import MovieInfo
 from models.form_validation import AddMovieFormValidation
+from models.genres import Genre
 from models.messageboxes import MyMessageBox
-from databases.db import  MyDatabase
+from models.movie_info import MovieInfo
 from models.window import Window
-
 
 
 class EditMovieForm(QMainWindow):
@@ -27,7 +19,7 @@ class EditMovieForm(QMainWindow):
 
     def __init__(self):
         super().__init__()
-        self.db = MyDatabase()
+        self.db = Database()
         self.my_window = Window()
         self.setWindowTitle('edit movie'.title())
         central_widget = QWidget()
@@ -40,7 +32,8 @@ class EditMovieForm(QMainWindow):
         [self.layout.addWidget(genre_checkbox) for genre_checkbox in self.genre_checkboxes]
         self.movie_data = self.get_movie_details(MovieInfo.MOVIE_ID)
         self.txt_movie.setText(self.movie_data['title'])
-        [checkbox.setChecked(True) for checkbox in self.genre_checkboxes if checkbox.text() in self.movie_data['genres']]
+        [checkbox.setChecked(True) for checkbox in self.genre_checkboxes if
+         checkbox.text() in self.movie_data['genres']]
         central_widget.setLayout(self.layout)
         self.setCentralWidget(central_widget)
 
@@ -56,7 +49,6 @@ class EditMovieForm(QMainWindow):
         for win in QApplication.topLevelWidgets():
             if win.windowTitle() == 'edit movie'.title():
                 win.destroy(True)
-
 
     def movie_button_action(self):
 
@@ -77,12 +69,8 @@ class EditMovieForm(QMainWindow):
 
 
 def main():
-    app = QApplication(sys.argv)
-    window = EditMovieForm()
-    window.show()
-    sys.exit(app.exec())
+    RunApp.run(EditMovieForm)
 
 
 if __name__ == '__main__':
-    db = MyDatabase()
     main()

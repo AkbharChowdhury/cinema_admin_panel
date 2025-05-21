@@ -1,11 +1,11 @@
 from pydantic import BaseModel
 
 
-from databases.db import  MyDatabase
+from databases.db import  Database
 class SearchMovie(BaseModel):
     title: str
     genre: str
-    __db: MyDatabase = MyDatabase()
+    __db: Database = Database()
 
     @staticmethod
     def any_genres():

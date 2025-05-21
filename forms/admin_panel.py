@@ -1,25 +1,24 @@
-import sys
 
-from PyQt6.QtWidgets import QWidget, QVBoxLayout, QLineEdit, QApplication, QComboBox, \
+from PyQt6.QtWidgets import QWidget, QVBoxLayout, QLineEdit, QComboBox, \
     QGridLayout, QPushButton, QLabel, QGroupBox, QTreeView, QHBoxLayout, QMessageBox
 
+from databases.db import Database
 from forms import add_movie as add_movie_form
 from forms import edit_movie as edit_movie_form
-
-from models.grid_layout_manager import GridLayoutManager
-from models.movie_table import MovieTable, MovieColumn
-from models.movie_info import MovieInfo
-
-from models.search import SearchMovie
-from models.messageboxes import MyMessageBox
-from models.window import Window
+from forms.run_app import RunApp
 from models.form_validation import ErrorMessage
-from databases.db import MyDatabase
+from models.grid_layout_manager import GridLayoutManager
+from models.messageboxes import MyMessageBox
+from models.movie_info import MovieInfo
+from models.movie_table import MovieTable, MovieColumn
+from models.search import SearchMovie
+from models.window import Window
 
 MOVIE_ID_COLUMN: str = 'MOVIE_ID'
 
 
 class AdminPanelWindow(QWidget):
+    MOVIE_ERROR_MESSAGE = ErrorMessage.movie_error_message()
     def fetch_filtered_movies(self) -> list[dict[str, str]]:
         title = MovieColumn.TITLE.name
         genres = MovieColumn.GENRES.name
@@ -31,7 +30,7 @@ class AdminPanelWindow(QWidget):
 
     def edit_movie(self):
         if not self.tree.selectedIndexes():
-            MyMessageBox.show_message_box(MOVIE_ERROR_MESSAGE, QMessageBox.Icon.Warning)
+            MyMessageBox.show_message_box(AdminPanelWindow.MOVIE_ERROR_MESSAGE, QMessageBox.Icon.Warning)
             return
         selected_movie_index = self.get_selected_table_index()
         self.update_movie_list()
@@ -52,7 +51,7 @@ class AdminPanelWindow(QWidget):
 
     def delete_movie(self):
         if not self.tree.selectedIndexes():
-            MyMessageBox.show_message_box(MOVIE_ERROR_MESSAGE, QMessageBox.Icon.Warning)
+            MyMessageBox.show_message_box(AdminPanelWindow.MOVIE_ERROR_MESSAGE, QMessageBox.Icon.Warning)
             return
 
         if MyMessageBox.confirm(self, 'Are you sure you want to delete this movie?') == QMessageBox.StandardButton.Yes:
@@ -68,7 +67,7 @@ class AdminPanelWindow(QWidget):
 
     def __init__(self):
         super().__init__()
-        self.db = MyDatabase()
+        self.db = Database()
         self.my_window = Window()
         self.movies = self.db.fetch_movies()
         self.setWindowTitle("admin panel".title())
@@ -138,15 +137,12 @@ class AdminPanelWindow(QWidget):
 
 
 def main():
-    app = QApplication(sys.argv)
-    window = AdminPanelWindow()
-    window.show()
-    sys.exit(app.exec())
+    RunApp.run(AdminPanelWindow)
 
 
 
 if __name__ == '__main__':
-    MOVIE_ERROR_MESSAGE = ErrorMessage.movie_error_message()
-    db = MyDatabase()
-    x = db.fetch_all_genres
-    print(x())
+    db = Database()
+    print(db.fetch_all_genres())
+    # main()
+

@@ -10,7 +10,7 @@ from models.enter_key import EnterAction
 from models.genres import Genre
 from models.form_validation import AddMovieFormValidation
 from models.messageboxes import MyMessageBox
-from databases.db import  MyDatabase
+from databases.db import MyDatabase
 from models.window import Window
 
 
@@ -56,14 +56,19 @@ class AddMovieForm(QMainWindow):
         EnterAction.enter(evt, self.movie_button_action)
 
 
+class RunApp:
+    @staticmethod
+    def run():
+        app = QApplication(sys.argv)
+        window = AddMovieForm()
+        window.show()
+        sys.exit(app.exec())
+
+
 def main():
-    app = QApplication(sys.argv)
-    window = AddMovieForm()
-    window.show()
-    sys.exit(app.exec())
+    db = MyDatabase()
+    RunApp.run()
 
 
 if __name__ == '__main__':
-    db = MyDatabase()
-    print(db)
     main()

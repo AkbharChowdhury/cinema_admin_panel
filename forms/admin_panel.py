@@ -14,7 +14,7 @@ from models.search import SearchMovie
 from models.messageboxes import MyMessageBox
 from models.window import Window
 from models.form_validation import ErrorMessage
-from databases.db import  MyDatabase
+from databases.db import MyDatabase
 
 MOVIE_ID_COLUMN: str = 'MOVIE_ID'
 
@@ -144,13 +144,9 @@ def main():
     sys.exit(app.exec())
 
 
-# if __name__ == '__main__':
-#     MOVIE_ERROR_MESSAGE = ErrorMessage.movie_error_message()
-#
-#     # db = MyDatabase()
-#     # print(db)
-#
-#     # main()
 
-db = MyDatabase()
-print('hello')
+if __name__ == '__main__':
+    MOVIE_ERROR_MESSAGE = ErrorMessage.movie_error_message()
+    db = MyDatabase()
+    x = db.fetch_all_genres
+    print(x())

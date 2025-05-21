@@ -5,16 +5,13 @@ from PyQt6.QtWidgets import (QApplication, QMainWindow, QWidget, QVBoxLayout, QL
                              QMessageBox
                              )
 
-import admin_panel
+from forms import admin_panel
 from models.enter_key import EnterAction
 from models.genres import Genre
 from models.form_validation import AddMovieFormValidation
 from models.messageboxes import MyMessageBox
 from databases.db import  MyDatabase
 from models.window import Window
-
-
-
 
 
 class AddMovieForm(QMainWindow):
@@ -68,4 +65,5 @@ def main():
 
 if __name__ == '__main__':
     db = MyDatabase()
+    print(db)
     main()

@@ -10,7 +10,7 @@ from PyQt6.QtWidgets import (QApplication,
                              QLineEdit, QMessageBox
                              )
 
-import admin_panel
+from forms import admin_panel
 from models.enter_key import EnterAction
 from models.genres import Genre
 from models.movie_info import MovieInfo

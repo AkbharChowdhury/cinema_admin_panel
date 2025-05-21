@@ -3,7 +3,6 @@ import sys
 from PyQt6.QtWidgets import QWidget, QVBoxLayout, QLineEdit, QApplication, QComboBox, \
     QGridLayout, QPushButton, QLabel, QGroupBox, QTreeView, QHBoxLayout, QMessageBox
 
-from databases.db import MyDatabase
 from forms import add_movie as add_movie_form
 from forms import edit_movie as edit_movie_form
 
@@ -14,8 +13,8 @@ from models.movie_info import MovieInfo
 from models.search import SearchMovie
 from models.messageboxes import MyMessageBox
 from models.window import Window
-# from database import Database
 from models.form_validation import ErrorMessage
+from databases.db import  MyDatabase
 
 MOVIE_ID_COLUMN: str = 'MOVIE_ID'
 
@@ -145,6 +144,13 @@ def main():
     sys.exit(app.exec())
 
 
-if __name__ == '__main__':
-    MOVIE_ERROR_MESSAGE = ErrorMessage.movie_error_message()
-    main()
+# if __name__ == '__main__':
+#     MOVIE_ERROR_MESSAGE = ErrorMessage.movie_error_message()
+#
+#     # db = MyDatabase()
+#     # print(db)
+#
+#     # main()
+
+db = MyDatabase()
+print('hello')

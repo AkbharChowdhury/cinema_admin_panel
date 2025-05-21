@@ -1,7 +1,7 @@
 from pydantic import BaseModel
 
 
-from databases.db import  Database
+from db import  Database
 class SearchMovie(BaseModel):
     title: str
     genre: str

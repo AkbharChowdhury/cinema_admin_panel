@@ -1,16 +1,20 @@
-from PyQt6.QtGui import QKeyEvent
-from PyQt6.QtWidgets import (QApplication, QMainWindow, QWidget, QVBoxLayout, QLabel, QPushButton, QLineEdit,
-                             QMessageBox)
+from PyQt6.QtWidgets import (QApplication,
+                             QMainWindow,
+                             QWidget,
+                             QVBoxLayout,
+                             QLabel,
+                             QPushButton,
+                             QLineEdit, QMessageBox
+                             )
 
-from databases.db import Database
-from forms import admin_panel
-from forms.run_app import RunApp
-from models.enter_key import EnterAction
-from models.form_validation import AddMovieFormValidation
+import admin_panel
 from models.genres import Genre
+from models.form_validation import AddMovieFormValidation
 from models.messageboxes import MyMessageBox
+from db import Database
 from models.movie_info import MovieInfo
 from models.window import Window
+from forms.run_app import RunApp
 
 
 class EditMovieForm(QMainWindow):
@@ -19,6 +23,7 @@ class EditMovieForm(QMainWindow):
 
     def __init__(self):
         super().__init__()
+        MovieInfo.MOVIE_ID = 46
         self.db = Database()
         self.my_window = Window()
         self.setWindowTitle('edit movie'.title())
@@ -64,13 +69,11 @@ class EditMovieForm(QMainWindow):
         MyMessageBox.show_message_box('Movie updated', QMessageBox.Icon.Information)
         self.window_action()
 
-    def keyPressEvent(self, evt: QKeyEvent):
-        EnterAction.enter(evt, self.movie_button_action)
-
 
 def main():
     RunApp.run(EditMovieForm)
 
 
 if __name__ == '__main__':
+    db = Database()
     main()

@@ -1,18 +1,17 @@
-import sys
-
 from PyQt6.QtGui import QKeyEvent
-from PyQt6.QtWidgets import (QApplication, QMainWindow, QWidget, QVBoxLayout, QLabel, QPushButton, QLineEdit,
+from PyQt6.QtWidgets import (QMainWindow, QWidget, QVBoxLayout, QLabel, QPushButton, QLineEdit,
                              QMessageBox
                              )
 
-from forms import admin_panel
+# from forms import admin_panel
+import admin_panel
 from forms.run_app import RunApp
 from models.enter_key import EnterAction
-from models.genres import Genre
 from models.form_validation import AddMovieFormValidation
+from models.genres import Genre
 from models.messageboxes import MyMessageBox
-from databases.db import Database
 from models.window import Window
+from db import Database
 
 
 class AddMovieForm(QMainWindow):

@@ -1,7 +1,8 @@
 from typing import Any
 from psycopg2 import connect
 from psycopg2.extras import DictCursor
-from databases.config import load_config
+
+from config import load_config
 from models.genres import Genre, MovieGenre
 
 

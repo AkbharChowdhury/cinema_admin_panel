@@ -1,0 +1,3 @@
+pip install PyQt6
+pip install psycopg2
+pip install pydantic

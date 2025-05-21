@@ -1,0 +1,6 @@
+PyQt treeview:
+https://pythonspot.com/pyqt5-treeview/
+PyQt layouts:
+https://realpython.com/python-pyqt-layout/
+PyQt gridlayout:
+https://www.pythontutorial.net/pyqt/pyqt-qgridlayout/

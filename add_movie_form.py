@@ -3,7 +3,6 @@ from PyQt6.QtWidgets import (QMainWindow, QWidget, QVBoxLayout, QLabel, QPushBut
                              QMessageBox
                              )
 
-# from forms import admin_panel
 import admin_panel
 from forms.run_app import RunApp
 from models.enter_key import EnterAction
@@ -56,11 +55,9 @@ class AddMovieForm(QMainWindow):
         EnterAction.enter(evt, self.movie_button_action)
 
 
-
-
-
 def main():
     RunApp.run(AddMovieForm)
+
 
 if __name__ == '__main__':
     main()

@@ -28,7 +28,7 @@ class AdminPanelWindow(QWidget):
 
     def edit_movie(self):
         if not self.tree.selectedIndexes():
-            MyMessageBox.show_message_box(MOVIE_ERROR_MESSAGE, QMessageBox.Icon.Warning)
+            MyMessageBox.show_message_box(ErrorMessage.movie_error_message(), QMessageBox.Icon.Warning)
             return
         selected_movie_index = self.get_selected_table_index()
         self.update_movie_list()
@@ -49,7 +49,7 @@ class AdminPanelWindow(QWidget):
 
     def delete_movie(self):
         if not self.tree.selectedIndexes():
-            MyMessageBox.show_message_box(MOVIE_ERROR_MESSAGE, QMessageBox.Icon.Warning)
+            MyMessageBox.show_message_box(ErrorMessage.movie_error_message(), QMessageBox.Icon.Warning)
             return
 
         if MyMessageBox.confirm(self, 'Are you sure you want to delete this movie?') == QMessageBox.StandardButton.Yes:
@@ -138,8 +138,4 @@ def main():
 
 
 if __name__ == '__main__':
-    MOVIE_ERROR_MESSAGE = ErrorMessage.movie_error_message()
-    from filter_movies import filter_movie
-    filter_movie(Database(), movie_id=61)
     main()
-

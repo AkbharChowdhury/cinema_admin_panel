@@ -1,10 +1,8 @@
 from typing import Any
 from psycopg2 import connect
 from psycopg2.extras import DictCursor
-
 from config import load_config
 from models.genres import Genre, MovieGenre
-
 
 class Database:
 
@@ -54,8 +52,3 @@ class Database:
 
     def __field(self, name: str):
         return f'%({name})s'
-
-
-if __name__ == '__main__':
-    db = Database()
-    print(db.fetch_all_genres())

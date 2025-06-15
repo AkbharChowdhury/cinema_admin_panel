@@ -7,7 +7,7 @@ from PyQt6.QtWidgets import (QApplication,
                              QLineEdit, QMessageBox, QCheckBox
                              )
 
-# import admin_panel
+import operator
 import main_menu as admin_panel
 from models.genres import Genre
 from models.form_validation import AddMovieFormValidation
@@ -62,8 +62,9 @@ class EditMovieForm(QMainWindow):
         form = AddMovieFormValidation(self.genre_checkboxes, self.txt_movie)
         if not form.is_valid(): return
         genres: set[int] = Genre.selected_genres(db, self.genre_checkboxes)
-        movie_text = self.txt_movie.text().strip()
-        if movie_text != self.movie_data.get('title'):  db.update_movie(MovieInfo.MOVIE_ID, movie_text)
+
+        if (movie_text := self.txt_movie.text().strip()) != self.movie_data.get('title'):
+            db.update_movie(MovieInfo.MOVIE_ID, movie_text)
         db.delete('movie_id', 'movie_genres', MovieInfo.MOVIE_ID)
         db.add_movie_genres(MovieInfo.MOVIE_ID, genres)
         MyMessageBox.show_message_box('Movie updated', QMessageBox.Icon.Information)

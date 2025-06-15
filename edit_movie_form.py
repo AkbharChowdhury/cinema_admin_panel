@@ -60,7 +60,6 @@ class EditMovieForm(QMainWindow):
         form = AddMovieFormValidation(self.genre_checkboxes, self.txt_movie)
         if not form.is_valid(): return
         genres: set[int] = Genre.selected_genre_ids(db, self.genre_checkboxes)
-
         movie_text = self.txt_movie.text().strip()
         if movie_text != self.movie_data.get('title'):  db.update_movie(MovieInfo.MOVIE_ID, movie_text)
         db.delete('movie_id', 'movie_genres', MovieInfo.MOVIE_ID)

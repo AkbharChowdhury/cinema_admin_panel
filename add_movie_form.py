@@ -43,8 +43,7 @@ class AddMovieForm(QMainWindow):
         db = self.db
         form = AddMovieFormValidation(self.genre_checkboxes, self.txt_movie)
         if not form.is_valid(): return
-        selected_genres: list[str] = Genre.selected_genres(self.genre_checkboxes)
-        genres: set = set(genre.genre_id for genre in Genre.get_genres(db) if genre.name in selected_genres)
+        genres: set[int] = Genre.selected_genre_ids(db, self.genre_checkboxes)
         movie_title: str = self.txt_movie.text()
         db.add_movie_and_genres(movie_title, genres)
         form.clear_form()

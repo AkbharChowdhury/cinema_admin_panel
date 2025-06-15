@@ -59,13 +59,12 @@ class EditMovieForm(QMainWindow):
         db = self.db
         form = AddMovieFormValidation(self.genre_checkboxes, self.txt_movie)
         if not form.is_valid(): return
-        selected_genres: list[str] = Genre.selected_genres(self.genre_checkboxes)
+        genres: set[int] = Genre.selected_genre_ids(db, self.genre_checkboxes)
 
-        genre_id_list = set(genre.genre_id for genre in Genre.get_genres(self.db) if genre.name in selected_genres)
         movie_text = self.txt_movie.text().strip()
         if movie_text != self.movie_data.get('title'):  db.update_movie(MovieInfo.MOVIE_ID, movie_text)
         db.delete('movie_id', 'movie_genres', MovieInfo.MOVIE_ID)
-        db.add_movie_genres(MovieInfo.MOVIE_ID, genre_id_list)
+        db.add_movie_genres(MovieInfo.MOVIE_ID, genres)
         MyMessageBox.show_message_box('Movie updated', QMessageBox.Icon.Information)
         self.window_action()
 

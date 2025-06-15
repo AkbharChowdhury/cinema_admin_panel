@@ -23,7 +23,6 @@ class EditMovieForm(QMainWindow):
 
     def __init__(self):
         super().__init__()
-        MovieInfo.MOVIE_ID = 46
         self.db = Database()
         self.my_window = Window()
         self.setWindowTitle('edit movie'.title())
@@ -60,7 +59,8 @@ class EditMovieForm(QMainWindow):
         db = self.db
         form = AddMovieFormValidation(self.genre_checkboxes, self.txt_movie)
         if not form.is_valid(): return
-        selected_genres = [checkbox.text() for checkbox in self.genre_checkboxes if checkbox.isChecked()]
+        selected_genres: list[str] = Genre.selected_genres(self.genre_checkboxes)
+
         genre_id_list = set(genre.genre_id for genre in Genre.get_genres(self.db) if genre.name in selected_genres)
         movie_text = self.txt_movie.text().strip()
         if movie_text != self.movie_data.get('title'):  db.update_movie(MovieInfo.MOVIE_ID, movie_text)

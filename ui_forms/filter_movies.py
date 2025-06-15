@@ -20,11 +20,8 @@ class Movie(BaseModel):
 def filter_movie(db, movie_id: int):
     movies = db.fetch_movies()
     movie = list(filter(lambda x: operator.eq(movie_id, x['movie_id']), movies))[0]
-
-    genres: list[str] = movie.get('genres').split(Genre.genre_split())
+    genres: list[str] = movie['genres'].split(Genre.genre_split())
     movie.update({'genres': genres})
     my_movie: Movie = Movie(**movie)
-    print(list(filter(lambda x: operator.eq(movie_id, x['movie_id']), movies)))
     print(my_movie)
-    print(my_movie.genres)
-    print(my_movie.title)
+

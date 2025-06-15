@@ -21,12 +21,12 @@ class AddMovieFormValidation:
 
     def is_valid(self):
         if self.txt_movie.text().strip() == '':
-            MyMessageBox.show_message_box('Movie title is required!', QMessageBox.Icon.Critical)
+            MyMessageBox.show_message_box('Movie title is required!')
             return False
-        if not self._has_selected_genre():
-            MyMessageBox.show_message_box('Please choose a genre!', QMessageBox.Icon.Critical)
+        if not self.__has_selected_genre():
+            MyMessageBox.show_message_box('Please choose a genre!')
             return False
         return True
 
-    def _has_selected_genre(self):
+    def __has_selected_genre(self):
         return len(list(filter(lambda checkbox: checkbox.isChecked(), self.__checkbox_genres))) > 0

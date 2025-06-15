@@ -112,7 +112,7 @@ class AdminPanelWindow(QWidget):
         btn_edit_movie = QPushButton("edit movie".title())
         btn_delete_movie = QPushButton("delete movie".title())
 
-        btn_add_movie.clicked.connect(lambda x: self.my_window.show_new_window(add_movie_form.AddMovieForm()))
+        btn_add_movie.clicked.connect(lambda _: self.my_window.show_new_window(add_movie_form.AddMovieForm()))
         btn_delete_movie.clicked.connect(self.delete_movie)
         btn_edit_movie.clicked.connect(self.edit_movie)
 
@@ -132,8 +132,11 @@ class AdminPanelWindow(QWidget):
         self.update_movie_list()
         MovieTable.add_movies(self.model, self.movies)
 
-
+def fetch_movie(movie_id: int = 66):
+    from filter_movies import filter_movie
+    filter_movie(Database(), movie_id)
 def main():
+    fetch_movie()
     RunApp.run(AdminPanelWindow)
 
 

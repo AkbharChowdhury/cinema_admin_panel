@@ -3,7 +3,7 @@ from PyQt6.QtWidgets import QMessageBox
 
 class MyMessageBox:
     @staticmethod
-    def show_message_box(message: str, msg_icon: QMessageBox.Icon):
+    def show_message_box(message: str, msg_icon: QMessageBox.Icon = QMessageBox.Icon.Critical):
         msg = QMessageBox()
         msg.setIcon(msg_icon)
         msg.setText(message)

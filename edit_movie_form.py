@@ -4,7 +4,7 @@ from PyQt6.QtWidgets import (QApplication,
                              QVBoxLayout,
                              QLabel,
                              QPushButton,
-                             QLineEdit, QMessageBox
+                             QLineEdit, QMessageBox, QCheckBox
                              )
 
 import admin_panel
@@ -32,7 +32,7 @@ class EditMovieForm(QMainWindow):
         self.txt_movie = QLineEdit(self)
 
         self.layout.addWidget(self.txt_movie)
-        self.genre_checkboxes = Genre.create_genre_checkboxes(self.db)
+        self.genre_checkboxes:  list[QCheckBox] = Genre.create_genre_checkboxes(self.db)
         [self.layout.addWidget(genre_checkbox) for genre_checkbox in self.genre_checkboxes]
         self.movie_data = self.get_movie_details(MovieInfo.MOVIE_ID)
         self.txt_movie.setText(self.movie_data['title'])
@@ -59,7 +59,7 @@ class EditMovieForm(QMainWindow):
         db = self.db
         form = AddMovieFormValidation(self.genre_checkboxes, self.txt_movie)
         if not form.is_valid(): return
-        genres: set[int] = Genre.selected_genre_ids(db, self.genre_checkboxes)
+        genres: set[int] = Genre.selected_genres(db, self.genre_checkboxes)
         movie_text = self.txt_movie.text().strip()
         if movie_text != self.movie_data.get('title'):  db.update_movie(MovieInfo.MOVIE_ID, movie_text)
         db.delete('movie_id', 'movie_genres', MovieInfo.MOVIE_ID)

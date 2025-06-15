@@ -1,6 +1,5 @@
 from typing_extensions import TypedDict, ReadOnly
 
-from db import Database
 from models.genres import Genre
 import operator
 
@@ -11,10 +10,8 @@ class Movie(TypedDict):
     genres: list[str]
 
 
-def main():
-    db = Database()
+def filter_movie(db, movie_id: int):
     movies = db.fetch_movies()
-    movie_id: int = 33
     data: dict[str, str] = list(filter(lambda x: operator.eq(movie_id, x['movie_id']), movies))[0]
     print(f'{data=}')
     genres: list[str] = data.get('genres').split(Genre.genre_split())
@@ -27,7 +24,3 @@ def main():
     print(movie_id)
     print(title)
     print(genres)
-
-
-if __name__ == '__main__':
-    main()

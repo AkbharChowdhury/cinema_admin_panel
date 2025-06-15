@@ -1,8 +1,8 @@
 from PyQt6.QtWidgets import QWidget, QVBoxLayout, QLineEdit, QComboBox, \
     QGridLayout, QPushButton, QLabel, QGroupBox, QTreeView, QHBoxLayout, QMessageBox
 
-import add_movie_form
-import edit_movie_form
+import add_to_movies as add_movie_form
+import modify_movie as edit_movie_form
 from db import Database
 from models.form_validation import ErrorMessage
 from models.grid_layout_manager import GridLayoutManager
@@ -68,7 +68,7 @@ class AdminPanelWindow(QWidget):
         self.db = Database()
         self.my_window = Window()
         self.movies = self.db.fetch_movies()
-        self.setWindowTitle("admin panel".title())
+        self.setWindowTitle(Window.admin_window_title())
 
         left, top, width, height = (10, 10, 640, 450)
 
@@ -124,8 +124,7 @@ class AdminPanelWindow(QWidget):
         outer_layout.addLayout(middle_layout)
         outer_layout.addLayout(bottom_layout)
         self.setLayout(outer_layout)
-        self.tree.setColumnWidth(0, 300)
-        self.tree.setColumnWidth(1, 300)
+        [self.tree.setColumnWidth(col, 300) for col in range(2)]
 
     def populate_table(self):
         self.model = self.movie_table.create_model(self)
@@ -140,4 +139,7 @@ def main():
 
 if __name__ == '__main__':
     MOVIE_ERROR_MESSAGE = ErrorMessage.movie_error_message()
+    from filter_movies import filter_movie
+    filter_movie(Database(), movie_id=61)
     main()
+

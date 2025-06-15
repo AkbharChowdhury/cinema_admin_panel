@@ -3,7 +3,7 @@ from PyQt6.QtWidgets import (QMainWindow, QWidget, QVBoxLayout, QLabel, QPushBut
                              QMessageBox
                              )
 
-import admin_panel
+import main_menu as admin_panel
 from forms.run_app import RunApp
 from models.enter_key import EnterAction
 from models.form_validation import AddMovieFormValidation

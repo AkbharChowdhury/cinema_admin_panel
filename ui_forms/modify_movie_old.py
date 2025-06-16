@@ -4,7 +4,7 @@ from PyQt6.QtWidgets import (QApplication,
                              QVBoxLayout,
                              QLabel,
                              QPushButton,
-                             QLineEdit, QMessageBox, QCheckBox, QGridLayout, QFormLayout
+                             QLineEdit, QMessageBox, QCheckBox
                              )
 
 import main_menu as admin_panel
@@ -13,77 +13,69 @@ from forms.run_app import RunApp
 from models.buttons import MyButton
 from models.form_validation import AddMovieFormValidation
 from models.genres import Genre
-from models.grid_layout_manager import GridLayoutManager
 from models.messageboxes import MyMessageBox
 from models.movie_info import MovieInfo
 from models.window import Window
 
 
-class EditMovieForm(QWidget):
+class EditMovieForm(QMainWindow):
+    def fetch_movie_details(self, movie_id: int) -> dict[str, str]:
+        return list(filter(lambda movie: movie['movie_id'] == movie_id, self.db.fetch_movies()))[0]
 
     def __init__(self):
         super().__init__()
-        self.setWindowTitle("Edit Movie")
+        MovieInfo.MOVIE_ID=46
         self.db = Database()
         self.my_window = Window()
-
+        self.setWindowTitle('edit movie'.title())
+        central_widget = QWidget()
+        self.layout = QVBoxLayout()
+        self.layout.addWidget(QLabel("Movie"))
         self.txt_movie = QLineEdit(self)
 
-        btn_undo_title = QPushButton('undo'.title(), self)
+
+
+        self.layout.addWidget(self.txt_movie)
+        btn_undo_title = QPushButton('undo title'.title(), self)
         btn_undo_genres = QPushButton('undo genres'.title(), self)
-        btn_edit_movie = QPushButton('update movie'.title(), self)
-
-        # Create an outer layout
-        outerLayout = QVBoxLayout()
-
-        topLayout = QGridLayout()
-
-        topLayout.addWidget(QLabel('movie'.title()), 0, 0)
-        topLayout.addWidget(self.txt_movie, 1, 0)
-        topLayout.addWidget(btn_undo_title, 1, 1)
-
-        undoGenreLayout = QVBoxLayout()
-        undoGenreLayout.addWidget(btn_undo_genres)
-
-        genreOptionsLayout = QVBoxLayout()
+        self.layout.addWidget(btn_undo_title)
+        self.layout.addWidget(btn_undo_genres)
 
         self.genre_checkboxes: list[QCheckBox] = Genre.create_genre_checkboxes(self.db)
+        [self.layout.addWidget(genre_checkbox) for genre_checkbox in self.genre_checkboxes]
+        self.movie_data = self.fetch_movie_details(MovieInfo.MOVIE_ID)
+        self.txt_movie.setText(self.movie_data['title'])
+        [checkbox.setChecked(True) for checkbox in self.genre_checkboxes if
+         checkbox.text() in self.movie_data['genres']]
+        central_widget.setLayout(self.layout)
+        self.setCentralWidget(central_widget)
 
-        [genreOptionsLayout.addWidget(genre_checkbox) for genre_checkbox in self.genre_checkboxes]
+        btn_edit_movie = QPushButton('update movie'.title(), self)
 
-        bottomLayout = QVBoxLayout()
-        bottomLayout.addWidget(btn_edit_movie)
-
-        # Nest the inner layouts into the outer layout
-        outerLayout.addLayout(topLayout)
-        outerLayout.addLayout(undoGenreLayout)
-        outerLayout.addLayout(genreOptionsLayout)
-        outerLayout.addLayout(bottomLayout)
-
-        # Set the window's main layout
-        self.setLayout(outerLayout)
 
         btn_edit_movie.clicked.connect(self.movie_button_action)
         btn_undo_title.clicked.connect(self.undo_title)
         btn_undo_genres.clicked.connect(self.undo_genres)
 
-        self.movie_data = self.fetch_movie_details(MovieInfo.MOVIE_ID)
-        self.txt_movie.setText(self.movie_data['title'])
-        [checkbox.setChecked(True) for checkbox in self.genre_checkboxes if
-         checkbox.text() in self.movie_data['genres']]
-
         MyButton.hand_cursor([btn_edit_movie, btn_undo_title, btn_undo_genres])
+        self.layout.addWidget(btn_edit_movie)
 
+    def window_action(self):
+        if Window.has_closed_admin_panel():
+            self.my_window.show_new_window(admin_panel.AdminPanelWindow())
+
+        for win in QApplication.topLevelWidgets():
+            if win.windowTitle() == 'edit movie'.title():
+                win.destroy(True)
     def undo_title(self):
+        print('s')
         self.txt_movie.setText("")
         self.txt_movie.setText(self.movie_data['title'])
-
     def undo_genres(self):
         for checkbox in self.genre_checkboxes:
             checkbox.setChecked(False)
         [checkbox.setChecked(True) for checkbox in self.genre_checkboxes if
          checkbox.text() in self.movie_data['genres']]
-
     def movie_button_action(self):
 
         db = self.db
@@ -98,17 +90,9 @@ class EditMovieForm(QWidget):
         MyMessageBox.show_message_box('Movie updated', QMessageBox.Icon.Information)
         self.window_action()
 
-    def window_action(self):
-        if Window.has_closed_admin_panel():
-            self.my_window.show_new_window(admin_panel.AdminPanelWindow())
-        Window.close_edit_form()
-
-    def fetch_movie_details(self, movie_id: int) -> dict[str, str]:
-        return list(filter(lambda movie: movie['movie_id'] == movie_id, self.db.fetch_movies()))[0]
-
 
 def main():
-    RunApp.run(EditMovieForm, (700, 700))
+    RunApp.run(EditMovieForm)
 
 
 if __name__ == '__main__':

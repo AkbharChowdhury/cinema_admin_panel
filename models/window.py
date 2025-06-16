@@ -19,3 +19,8 @@ class Window:
                 win.close()
                 return True
         return False
+    @staticmethod
+    def close_edit_form():
+        for win in QApplication.topLevelWidgets():
+            if win.windowTitle() == 'edit movie'.title():
+                win.destroy(True)

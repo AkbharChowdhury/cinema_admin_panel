@@ -31,9 +31,15 @@ class EditMovieForm(QMainWindow):
         self.layout = QVBoxLayout()
         self.layout.addWidget(QLabel("Movie"))
         self.txt_movie = QLineEdit(self)
-        # btn_undo_title = QPushButton('undo title'.title(), self)
+
+
 
         self.layout.addWidget(self.txt_movie)
+        btn_undo_title = QPushButton('undo title'.title(), self)
+        btn_undo_genres = QPushButton('undo genres'.title(), self)
+        self.layout.addWidget(btn_undo_title)
+        self.layout.addWidget(btn_undo_genres)
+
         self.genre_checkboxes: list[QCheckBox] = Genre.create_genre_checkboxes(self.db)
         [self.layout.addWidget(genre_checkbox) for genre_checkbox in self.genre_checkboxes]
         self.movie_data = self.fetch_movie_details(MovieInfo.MOVIE_ID)
@@ -44,8 +50,13 @@ class EditMovieForm(QMainWindow):
         self.setCentralWidget(central_widget)
 
         btn_edit_movie = QPushButton('update movie'.title(), self)
+
+
         btn_edit_movie.clicked.connect(self.movie_button_action)
-        MyButton.hand_cursor([btn_edit_movie])
+        btn_undo_title.clicked.connect(self.undo_title)
+        btn_undo_genres.clicked.connect(self.undo_genres)
+
+        MyButton.hand_cursor([btn_edit_movie, btn_undo_title, btn_undo_genres])
         self.layout.addWidget(btn_edit_movie)
 
     def window_action(self):
@@ -55,7 +66,15 @@ class EditMovieForm(QMainWindow):
         for win in QApplication.topLevelWidgets():
             if win.windowTitle() == 'edit movie'.title():
                 win.destroy(True)
-
+    def undo_title(self):
+        print('s')
+        self.txt_movie.setText("")
+        self.txt_movie.setText(self.movie_data['title'])
+    def undo_genres(self):
+        for checkbox in self.genre_checkboxes:
+            checkbox.setChecked(False)
+        [checkbox.setChecked(True) for checkbox in self.genre_checkboxes if
+         checkbox.text() in self.movie_data['genres']]
     def movie_button_action(self):
 
         db = self.db

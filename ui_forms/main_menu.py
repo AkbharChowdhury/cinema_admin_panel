@@ -4,6 +4,7 @@ from PyQt6.QtWidgets import QWidget, QVBoxLayout, QLineEdit, QComboBox, \
 import add_to_movies as add_movie_form
 import modify_movie as edit_movie_form
 from db import Database
+from models.buttons import MyButton
 from models.form_validation import ErrorMessage
 from models.grid_layout_manager import GridLayoutManager
 from models.messageboxes import MyMessageBox
@@ -111,6 +112,7 @@ class AdminPanelWindow(QWidget):
         btn_add_movie = QPushButton("add movie".title())
         btn_edit_movie = QPushButton("edit movie".title())
         btn_delete_movie = QPushButton("delete movie".title())
+        MyButton.hand_cursor([btn_add_movie, btn_edit_movie, btn_delete_movie])
 
         btn_add_movie.clicked.connect(lambda _: self.my_window.show_new_window(add_movie_form.AddMovieForm()))
         btn_delete_movie.clicked.connect(self.delete_movie)
@@ -132,11 +134,14 @@ class AdminPanelWindow(QWidget):
         self.update_movie_list()
         MovieTable.add_movies(self.model, self.movies)
 
+
 def fetch_movie(movie_id: int = 66):
     from filter_movies import filter_movie
     filter_movie(Database(), movie_id)
+
+
 def main():
-    fetch_movie()
+    # fetch_movie()
     RunApp.run(AdminPanelWindow)
 
 

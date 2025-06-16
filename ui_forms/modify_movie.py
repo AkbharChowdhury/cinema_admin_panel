@@ -8,13 +8,14 @@ from PyQt6.QtWidgets import (QApplication,
                              )
 
 import main_menu as admin_panel
-from models.genres import Genre
-from models.form_validation import AddMovieFormValidation
-from models.messageboxes import MyMessageBox
 from db import Database
+from forms.run_app import RunApp
+from models.buttons import MyButton
+from models.form_validation import AddMovieFormValidation
+from models.genres import Genre
+from models.messageboxes import MyMessageBox
 from models.movie_info import MovieInfo
 from models.window import Window
-from forms.run_app import RunApp
 
 
 class EditMovieForm(QMainWindow):
@@ -30,6 +31,7 @@ class EditMovieForm(QMainWindow):
         self.layout = QVBoxLayout()
         self.layout.addWidget(QLabel("Movie"))
         self.txt_movie = QLineEdit(self)
+        # btn_undo_title = QPushButton('undo title'.title(), self)
 
         self.layout.addWidget(self.txt_movie)
         self.genre_checkboxes: list[QCheckBox] = Genre.create_genre_checkboxes(self.db)
@@ -43,7 +45,7 @@ class EditMovieForm(QMainWindow):
 
         btn_edit_movie = QPushButton('update movie'.title(), self)
         btn_edit_movie.clicked.connect(self.movie_button_action)
-
+        MyButton.hand_cursor([btn_edit_movie])
         self.layout.addWidget(btn_edit_movie)
 
     def window_action(self):

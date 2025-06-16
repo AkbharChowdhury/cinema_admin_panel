@@ -5,6 +5,7 @@ from PyQt6.QtWidgets import (QMainWindow, QWidget, QVBoxLayout, QLabel, QPushBut
 
 import main_menu as admin_panel
 from forms.run_app import RunApp
+from models.buttons import MyButton
 from models.enter_key import EnterAction
 from models.form_validation import AddMovieFormValidation
 from models.genres import Genre
@@ -36,6 +37,7 @@ class AddMovieForm(QMainWindow):
         self.setCentralWidget(central_widget)
 
         btn_add_movie = QPushButton('add movie'.title(), self)
+        MyButton.hand_cursor([btn_add_movie])
         btn_add_movie.clicked.connect(self.movie_button_action)
         self.layout.addWidget(btn_add_movie)
 

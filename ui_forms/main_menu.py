@@ -1,5 +1,5 @@
 from PyQt6.QtWidgets import QWidget, QVBoxLayout, QLineEdit, QComboBox, \
-    QGridLayout, QPushButton, QLabel, QGroupBox, QTreeView, QHBoxLayout, QMessageBox
+    QGridLayout, QPushButton, QLabel, QGroupBox, QTreeView, QHBoxLayout, QMessageBox, QAbstractItemView
 
 import add_to_movies as add_movie_form
 import modify_movie as edit_movie_form
@@ -28,8 +28,8 @@ class AdminPanelWindow(QWidget):
         } for movie in self.search.filter_movie()]
 
     def edit_movie(self):
-        if not self.tree.selectedIndexes():
-            MyMessageBox.show_message_box(ErrorMessage.movie_error_message(), QMessageBox.Icon.Warning)
+        if self.is_selection_empty():
+            self.__show_error_message()
             return
         selected_movie_index = self.get_selected_table_index()
         self.update_movie_list()
@@ -48,9 +48,15 @@ class AdminPanelWindow(QWidget):
         self.search.genre = genre_text
         self.populate_table()
 
+    def __show_error_message(self) -> None:
+        MyMessageBox.show_message_box(ErrorMessage.movie_error_message(), QMessageBox.Icon.Critical)
+
+    def is_selection_empty(self):
+        return not self.tree.selectedIndexes()
+
     def delete_movie(self):
-        if not self.tree.selectedIndexes():
-            MyMessageBox.show_message_box(ErrorMessage.movie_error_message(), QMessageBox.Icon.Warning)
+        if self.is_selection_empty():
+            self.__show_error_message()
             return
 
         if MyMessageBox.confirm(self, 'Are you sure you want to delete this movie?') == QMessageBox.StandardButton.Yes:
@@ -90,7 +96,7 @@ class AdminPanelWindow(QWidget):
 
         self.combobox_genres = QComboBox()
         self.combobox_genres.addItem(SearchMovie.any_genres())
-        [self.combobox_genres.addItem(row.name) for row in self.db.fetch_movie_genres()]
+        list((self.combobox_genres.addItem(row.name) for row in self.db.fetch_movie_genres()))
         self.combobox_genres.activated.connect(self.combobox_changed)
 
         GridLayoutManager.add_widgets(top_layout,
@@ -101,12 +107,17 @@ class AdminPanelWindow(QWidget):
         self.tree.setRootIsDecorated(False)
         self.tree.setAlternatingRowColors(True)
 
+
+        # self.tree.setEditTriggers(QAbstractItemView.selectionMode())
+
+        # self.tree.edit
+        # self.tree.selectionMode(QAbstractItemView.setSelectionMode(QAbstractItemView.selectionMode().SingleSelection))
+
         data_layout = QHBoxLayout()
         data_layout.addWidget(self.tree)
 
         self.data_group_box.setLayout(data_layout)
         self.movie_table = MovieTable()
-        self.model = None
         self.populate_table()
 
         btn_add_movie = QPushButton("add movie".title())
@@ -128,11 +139,12 @@ class AdminPanelWindow(QWidget):
         self.setLayout(outer_layout)
         [self.tree.setColumnWidth(col, 300) for col in range(2)]
 
+
     def populate_table(self):
-        self.model = self.movie_table.create_model(self)
-        self.tree.setModel(self.model)
+        model = self.movie_table.create_model(self)
+        self.tree.setModel(model)
         self.update_movie_list()
-        MovieTable.add_movies(self.model, self.movies)
+        MovieTable.add_movies(model, self.movies)
 
 
 def fetch_movie(movie_id: int = 66):

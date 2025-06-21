@@ -143,13 +143,7 @@ class AdminPanelWindow(QWidget):
         MovieTable.add_movies(model, self.movies)
 
 
-def fetch_movie(movie_id: int = 66):
-    from filter_movies import filter_movie
-    filter_movie(Database(), movie_id)
-
-
 def main():
-    # fetch_movie()
     RunApp.run(AdminPanelWindow)
 
 

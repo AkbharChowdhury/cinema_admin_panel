@@ -109,7 +109,6 @@ class AdminPanelWindow(QWidget):
                                       [QLabel("Movie"), self.text_box_movies, QLabel("Genre"), self.combobox_genres])
 
         self.data_group_box = QGroupBox()
-        # self.tree = QTreeView()
         self.tree = CustomTreeView()
         self.tree.setRootIsDecorated(False)
         self.tree.setAlternatingRowColors(True)

@@ -10,7 +10,6 @@ class MovieColumn(Enum):
 
 
 class MovieTable:
-
     def create_model(self, parent) -> QStandardItemModel:
         model = QStandardItemModel(0, len(MovieColumn), parent)
         for column in MovieColumn:

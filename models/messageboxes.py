@@ -12,5 +12,6 @@ class MyMessageBox:
         msg.exec()
 
     @staticmethod
-    def confirm(parent, message: str):
-        return QMessageBox.question(parent, 'Confirmation', message,QMessageBox.StandardButton.Yes | QMessageBox.StandardButton.No)
+    def has_confirmed(parent, message: str):
+        return QMessageBox.question(parent, 'Confirmation', message,
+                                    QMessageBox.StandardButton.Yes | QMessageBox.StandardButton.No) == QMessageBox.StandardButton.Yes

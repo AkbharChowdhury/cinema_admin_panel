@@ -31,9 +31,9 @@ class AdminPanelWindow(QWidget):
         if self.is_selection_empty():
             self.__show_error_message()
             return
-        selected_movie_index = self.get_selected_table_index()
+
         self.update_movie_list()
-        MovieInfo.MOVIE_ID = self.movies[selected_movie_index].get('MOVIE_ID')
+        MovieInfo.MOVIE_ID = self.movies[self.get_selected_table_index()].get('MOVIE_ID')
         self.my_window.show_new_window(edit_movie_form.EditMovieForm())
 
     def update_movie_list(self) -> None:
@@ -59,13 +59,16 @@ class AdminPanelWindow(QWidget):
             self.__show_error_message()
             return
 
-        if MyMessageBox.confirm(self, 'Are you sure you want to delete this movie?') == QMessageBox.StandardButton.Yes:
-            selected_movie_index = self.get_selected_table_index()
+        if MyMessageBox.has_confirmed(self, 'Are you sure you want to delete this movie?'):
             self.update_movie_list()
-            movie_id_col: str = MOVIE_ID_COLUMN
-            movie_id: int = int(self.movies[selected_movie_index].get(movie_id_col))
-            self.db.delete(movie_id_col.lower(), 'movies', movie_id)
-            self.tree.model().removeRow(selected_movie_index)
+            self.__delete_selected_movie()
+
+    def __delete_selected_movie(self) -> None:
+        selected_movie_index: int = self.get_selected_table_index()
+        movie_id_col: str = MOVIE_ID_COLUMN
+        movie_id: int = int(self.movies[selected_movie_index].get(movie_id_col))
+        self.db.delete(movie_id_col.lower(), 'movies', movie_id)
+        self.tree.model().removeRow(selected_movie_index)
 
     def get_selected_table_index(self):
         return self.tree.selectedIndexes()[0].row()
@@ -107,12 +110,6 @@ class AdminPanelWindow(QWidget):
         self.tree.setRootIsDecorated(False)
         self.tree.setAlternatingRowColors(True)
 
-
-        # self.tree.setEditTriggers(QAbstractItemView.selectionMode())
-
-        # self.tree.edit
-        # self.tree.selectionMode(QAbstractItemView.setSelectionMode(QAbstractItemView.selectionMode().SingleSelection))
-
         data_layout = QHBoxLayout()
         data_layout.addWidget(self.tree)
 
@@ -138,7 +135,6 @@ class AdminPanelWindow(QWidget):
         outer_layout.addLayout(bottom_layout)
         self.setLayout(outer_layout)
         [self.tree.setColumnWidth(col, 300) for col in range(2)]
-
 
     def populate_table(self):
         model = self.movie_table.create_model(self)

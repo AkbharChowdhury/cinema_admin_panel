@@ -1,14 +1,21 @@
 from enum import Enum, auto
 
 from PyQt6.QtCore import Qt
-from PyQt6.QtGui import QStandardItemModel, QStandardItem
+from PyQt6.QtGui import QStandardItemModel
+from PyQt6.QtWidgets import QTreeView, QAbstractItemView
 
 
 class MovieColumn(Enum):
     TITLE = 0
     GENRES = auto()
 
+class CustomTreeView(QTreeView):
 
+    def edit(self, index, trigger, event):
+        if trigger == QAbstractItemView.EditTrigger.DoubleClicked:
+            # disable double click event
+            return False
+        return QTreeView.edit(self, index, trigger, event)
 class MovieTable:
     def create_model(self, parent) -> QStandardItemModel:
         model = QStandardItemModel(0, len(MovieColumn), parent)

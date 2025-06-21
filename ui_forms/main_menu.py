@@ -9,12 +9,15 @@ from models.form_validation import ErrorMessage
 from models.grid_layout_manager import GridLayoutManager
 from models.messageboxes import MyMessageBox
 from models.movie_info import MovieInfo
-from models.movie_table import MovieTable, MovieColumn
+from models.movie_table import MovieTable, MovieColumn, CustomTreeView
 from models.search_movie import SearchMovie
 from models.window import Window
 from forms.run_app import RunApp
 
 MOVIE_ID_COLUMN: str = 'MOVIE_ID'
+
+
+
 
 
 class AdminPanelWindow(QWidget):
@@ -106,7 +109,8 @@ class AdminPanelWindow(QWidget):
                                       [QLabel("Movie"), self.text_box_movies, QLabel("Genre"), self.combobox_genres])
 
         self.data_group_box = QGroupBox()
-        self.tree = QTreeView()
+        # self.tree = QTreeView()
+        self.tree = CustomTreeView()
         self.tree.setRootIsDecorated(False)
         self.tree.setAlternatingRowColors(True)
 

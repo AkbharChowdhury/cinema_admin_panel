@@ -19,7 +19,7 @@ class Genre(BaseModel):
     genre_id: int = Field(default=str(uuid4()), gt=0)
 
     @staticmethod
-    def genre_split():
+    def genre_split() -> str:
         return ' | '
 
     @staticmethod

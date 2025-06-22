@@ -11,7 +11,6 @@ class MovieColumn(Enum):
 
 
 class CustomTreeView(QTreeView):
-
     def edit(self, index, trigger, event):
         if trigger == QAbstractItemView.EditTrigger.DoubleClicked:
             # disable double click event

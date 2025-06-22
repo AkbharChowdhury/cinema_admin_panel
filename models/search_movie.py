@@ -8,7 +8,7 @@ class SearchMovie(BaseModel):
     __db: Database = Database()
 
     @staticmethod
-    def any_genres():
+    def any_genres() -> str:
         return 'Any'
 
     def filter_movie(self):

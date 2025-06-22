@@ -1,2 +1,2 @@
 class MovieInfo:
-    MOVIE_ID = 0
+    MOVIE_ID: int = 0

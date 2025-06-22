@@ -17,9 +17,6 @@ from forms.run_app import RunApp
 MOVIE_ID_COLUMN: str = 'MOVIE_ID'
 
 
-
-
-
 class AdminPanelWindow(QWidget):
     def fetch_filtered_movies(self) -> list[dict[str, str]]:
         title = MovieColumn.TITLE.name
@@ -73,7 +70,7 @@ class AdminPanelWindow(QWidget):
         self.db.delete(movie_id_col.lower(), 'movies', movie_id)
         self.tree.model().removeRow(selected_movie_index)
 
-    def get_selected_table_index(self):
+    def get_selected_table_index(self) -> int:
         return self.tree.selectedIndexes()[0].row()
 
     def __init__(self):
@@ -86,7 +83,10 @@ class AdminPanelWindow(QWidget):
         left, top, width, height = (10, 10, 640, 450)
 
         self.setGeometry(left, top, width, height)
-        self.movie_title = self.genre = ''
+
+        self.movie_title: str = ''
+        self.genre: str = ''
+
         self.search = SearchMovie(title='', genre='')
         self.search.filter_movie()
 
@@ -144,6 +144,7 @@ class AdminPanelWindow(QWidget):
         self.tree.setModel(model)
         self.update_movie_list()
         MovieTable.add_movies(model, self.movies)
+
 
 
 def main():

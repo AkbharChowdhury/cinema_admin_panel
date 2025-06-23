@@ -1,17 +1,15 @@
-from PyQt6.QtGui import QKeyEvent
 from PyQt6.QtWidgets import (QMainWindow, QWidget, QVBoxLayout, QLabel, QPushButton, QLineEdit,
                              QMessageBox
                              )
 
 import main_menu as admin_panel
+from db import Database
 from forms.run_app import RunApp
 from models.buttons import MyButton
-from models.enter_key import EnterAction
 from models.form_validation import AddMovieFormValidation
 from models.genres import Genre
 from models.messageboxes import MyMessageBox
 from models.window import Window
-from db import Database
 
 
 class AddMovieForm(QMainWindow):
@@ -43,17 +41,15 @@ class AddMovieForm(QMainWindow):
 
     def movie_button_action(self):
         db = self.db
-        form = AddMovieFormValidation(self.genre_checkboxes, self.txt_movie)
+        form = AddMovieFormValidation(checkbox_genres=self.genre_checkboxes, txt_movie=self.txt_movie)
         if not form.is_valid(): return
         genres: set[int] = Genre.selected_genres(db, self.genre_checkboxes)
         movie_title: str = self.txt_movie.text().strip()
         db.add_movie_and_genres(movie_title, genres)
-        form.clear_form()
+        form.clear()
         MyMessageBox.show_message_box('movie added'.title(), QMessageBox.Icon.Information)
         self.window_action()
-
-    def keyPressEvent(self, evt: QKeyEvent):
-        EnterAction.enter(evt, self.movie_button_action)
+        self.txt_movie.returnPressed.connect(lambda _: self.movie_button_action)
 
 
 def main():

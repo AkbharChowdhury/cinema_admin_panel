@@ -23,11 +23,13 @@ class EditMovieForm(QWidget):
 
     def __init__(self):
         super().__init__()
-        self.setWindowTitle("Edit Movie")
+        # self.setWindowTitle("Edit Movie")
         self.db = Database()
         self.my_window = Window()
 
         self.txt_movie = QLineEdit(self)
+
+        self.txt_movie.returnPressed.connect(lambda _: self.movie_button_action)
 
         btn_undo_title = QPushButton('undo'.title(), self)
         btn_undo_genres = QPushButton('undo genres'.title(), self)
@@ -67,7 +69,9 @@ class EditMovieForm(QWidget):
         btn_undo_title.clicked.connect(self.undo_title)
         btn_undo_genres.clicked.connect(self.undo_genres)
 
-        self.movie_data = self.fetch_movie_details(MovieInfo.MOVIE_ID)
+        self.movie_data: dict[str, str] = self.fetch_movie_details(MovieInfo.MOVIE_ID)
+        self.setWindowTitle(self.movie_data.get('title', 'edit movie'.title()))
+
         self.txt_movie.setText(self.movie_data['title'])
         [checkbox.setChecked(True) for checkbox in self.genre_checkboxes if
          checkbox.text() in self.movie_data['genres']]
@@ -87,7 +91,8 @@ class EditMovieForm(QWidget):
     def movie_button_action(self):
 
         db = self.db
-        form = AddMovieFormValidation(self.genre_checkboxes, self.txt_movie)
+        form = AddMovieFormValidation(checkbox_genres=self.genre_checkboxes, txt_movie=self.txt_movie)
+
         if not form.is_valid(): return
         genres: set[int] = Genre.selected_genres(db, self.genre_checkboxes)
 

@@ -5,6 +5,6 @@ from PyQt6.QtWidgets import QPushButton
 
 class MyButton:
     @staticmethod
-    def hand_cursor(buttons: list[QPushButton]):
+    def hand_cursor(buttons: list[QPushButton]) -> None:
         for button in buttons:
             button.setCursor(QCursor(Qt.CursorShape.PointingHandCursor))

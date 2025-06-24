@@ -2,6 +2,7 @@ from PyQt6.QtWidgets import QCheckBox
 from pydantic import BaseModel, field_validator, Field, NonNegativeInt
 from uuid import uuid4
 from typing import Union
+from operator import eq
 
 
 class MovieGenre(BaseModel):
@@ -26,7 +27,7 @@ class Genre(BaseModel):
     @staticmethod
     def create_genre_checkboxes(db) -> list[QCheckBox]:
         genres: list[Genre] = db.fetch_all_genres()
-        return [QCheckBox(genre.name) for genre in genres]
+        return list((QCheckBox(genre.name) for genre in genres))
 
     @staticmethod
     def selected_genres(db, genre_checkboxes: list[QCheckBox]) -> set[int]:
@@ -37,8 +38,6 @@ class Genre(BaseModel):
     @field_validator('name')
     @classmethod
     def validate_name(cls, name: str):
-        if name.strip() == '':
+        if eq(name.strip(), ''):
             raise Exception('Genre cannot be empty')
         return name
-
-

@@ -11,18 +11,21 @@ from models.genres import Genre
 from models.messageboxes import MyMessageBox
 from models.window import Window
 
+WINDOW_TITLE: str = "add movie".title()
+
 
 class AddMovieForm(QMainWindow):
 
-    def window_action(self):
-        if Window.has_closed_admin_panel():
+    def window_action(self) -> None:
+        if Window.has_closed_existing_admin_panel():
+            Window.close_form(window_title=WINDOW_TITLE)
             self.my_window.show_new_window(admin_panel.AdminPanelWindow())
 
     def __init__(self):
         super().__init__()
         self.db = Database()
         self.my_window = Window()
-        self.setWindowTitle("add movie".title())
+        self.setWindowTitle(WINDOW_TITLE)
         central_widget = QWidget()
         self.layout = QVBoxLayout()
         self.layout.addWidget(QLabel("Movie"))
@@ -48,8 +51,8 @@ class AddMovieForm(QMainWindow):
         db.add_movie_and_genres(movie_title, genres)
         form.clear()
         MyMessageBox.show_message_box('movie added'.title(), QMessageBox.Icon.Information)
-        self.window_action()
         self.txt_movie.returnPressed.connect(lambda _: self.movie_button_action)
+        self.window_action()
 
 
 def main():

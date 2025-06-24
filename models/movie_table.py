@@ -3,7 +3,7 @@ from enum import Enum, auto
 from PyQt6.QtCore import Qt
 from PyQt6.QtGui import QStandardItemModel
 from PyQt6.QtWidgets import QTreeView, QAbstractItemView
-
+from typing import Union
 
 class MovieColumn(Enum):
     TITLE = 0
@@ -11,7 +11,7 @@ class MovieColumn(Enum):
 
 
 class CustomTreeView(QTreeView):
-    def edit(self, index, trigger, event):
+    def edit(self, index, trigger, event) -> Union[False, None]:
         if trigger == QAbstractItemView.EditTrigger.DoubleClicked:
             # disable double click event
             return False

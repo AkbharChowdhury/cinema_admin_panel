@@ -1,9 +1,10 @@
 from PyQt6.QtWidgets import QWidget, QVBoxLayout, QLineEdit, QComboBox, \
-    QGridLayout, QPushButton, QLabel, QGroupBox, QTreeView, QHBoxLayout, QMessageBox, QAbstractItemView
+    QGridLayout, QPushButton, QLabel, QGroupBox, QHBoxLayout, QMessageBox
 
 import add_to_movies as add_movie_form
 import modify_movie as edit_movie_form
 from db import Database
+from forms.run_app import RunApp
 from models.buttons import MyButton
 from models.form_validation import ErrorMessage
 from models.grid_layout_manager import GridLayoutManager
@@ -12,7 +13,6 @@ from models.movie_info import MovieInfo
 from models.movie_table import MovieTable, MovieColumn, CustomTreeView
 from models.search_movie import SearchMovie
 from models.window import Window
-from forms.run_app import RunApp
 
 MOVIE_ID_COLUMN: str = 'MOVIE_ID'
 
@@ -144,7 +144,6 @@ class AdminPanelWindow(QWidget):
         self.tree.setModel(model)
         self.update_movie_list()
         MovieTable.add_movies(model, self.movies)
-
 
 
 def main():

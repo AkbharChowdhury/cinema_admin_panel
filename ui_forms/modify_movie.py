@@ -35,35 +35,32 @@ class EditMovieForm(QWidget):
         btn_undo_genres = QPushButton('undo genres'.title(), self)
         btn_edit_movie = QPushButton('update movie'.title(), self)
 
-        # Create an outer layout
-        outerLayout = QVBoxLayout()
+        outer_layout = QVBoxLayout()
 
-        topLayout = QGridLayout()
+        top_layout = QGridLayout()
 
-        topLayout.addWidget(QLabel('movie'.title()), 0, 0)
-        topLayout.addWidget(self.txt_movie, 1, 0)
-        topLayout.addWidget(btn_undo_title, 1, 1)
+        top_layout.addWidget(QLabel('movie'.title()), 0, 0)
+        top_layout.addWidget(self.txt_movie, 1, 0)
+        top_layout.addWidget(btn_undo_title, 1, 1)
 
-        undoGenreLayout = QVBoxLayout()
-        undoGenreLayout.addWidget(btn_undo_genres)
+        undo_genre_layout = QVBoxLayout()
+        undo_genre_layout.addWidget(btn_undo_genres)
 
-        genreOptionsLayout = QVBoxLayout()
+        genre_options_layout = QVBoxLayout()
 
         self.genre_checkboxes: list[QCheckBox] = Genre.create_genre_checkboxes(self.db)
 
-        [genreOptionsLayout.addWidget(genre_checkbox) for genre_checkbox in self.genre_checkboxes]
+        [genre_options_layout.addWidget(genre_checkbox) for genre_checkbox in self.genre_checkboxes]
 
-        bottomLayout = QVBoxLayout()
-        bottomLayout.addWidget(btn_edit_movie)
+        bottom_layout = QVBoxLayout()
+        bottom_layout.addWidget(btn_edit_movie)
 
-        # Nest the inner layouts into the outer layout
-        outerLayout.addLayout(topLayout)
-        outerLayout.addLayout(undoGenreLayout)
-        outerLayout.addLayout(genreOptionsLayout)
-        outerLayout.addLayout(bottomLayout)
+        outer_layout.addLayout(top_layout)
+        outer_layout.addLayout(undo_genre_layout)
+        outer_layout.addLayout(genre_options_layout)
+        outer_layout.addLayout(bottom_layout)
 
-        # Set the window's main layout
-        self.setLayout(outerLayout)
+        self.setLayout(outer_layout)
 
         btn_edit_movie.clicked.connect(self.movie_button_action)
         btn_undo_title.clicked.connect(self.undo_title)
@@ -73,23 +70,19 @@ class EditMovieForm(QWidget):
         self.setWindowTitle(self.movie_data.get('title', 'edit movie'.title()))
 
         self.txt_movie.setText(self.movie_data['title'])
-        [checkbox.setChecked(True) for checkbox in self.genre_checkboxes if
-         checkbox.text() in self.movie_data['genres']]
-
+        self.undo_genres()
         MyButton.hand_cursor([btn_edit_movie, btn_undo_title, btn_undo_genres])
 
-    def undo_title(self):
+    def undo_title(self) -> None:
         self.txt_movie.setText("")
         self.txt_movie.setText(self.movie_data['title'])
 
-    def undo_genres(self):
-        for checkbox in self.genre_checkboxes:
-            checkbox.setChecked(False)
+    def undo_genres(self) -> None:
+        [checkbox.setChecked(False) for checkbox in self.genre_checkboxes]
         [checkbox.setChecked(True) for checkbox in self.genre_checkboxes if
          checkbox.text() in self.movie_data['genres']]
 
     def movie_button_action(self):
-
         db = self.db
         form = AddMovieFormValidation(checkbox_genres=self.genre_checkboxes, txt_movie=self.txt_movie)
 
@@ -103,10 +96,10 @@ class EditMovieForm(QWidget):
         MyMessageBox.show_message_box('Movie updated', QMessageBox.Icon.Information)
         self.window_action()
 
-    def window_action(self):
-        if Window.has_closed_admin_panel():
+    def window_action(self) -> None:
+        if Window.has_closed_existing_admin_panel():
+            Window.close_form(window_title=self.movie_data.get('title'))
             self.my_window.show_new_window(admin_panel.AdminPanelWindow())
-        Window.close_edit_form()
 
     def fetch_movie_details(self, movie_id: int) -> dict[str, str]:
         return list(filter(lambda movie: movie['movie_id'] == movie_id, self.db.fetch_movies()))[0]

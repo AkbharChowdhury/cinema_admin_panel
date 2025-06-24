@@ -1,6 +1,7 @@
 from PyQt6.QtWidgets import QCheckBox
 from pydantic import BaseModel, field_validator, Field, NonNegativeInt
 from uuid import uuid4
+from typing import Union
 
 
 class MovieGenre(BaseModel):
@@ -16,7 +17,7 @@ class Genre(BaseModel):
         frozen = True
 
     name: str
-    genre_id: int = Field(default=str(uuid4()), gt=0)
+    genre_id: Union[str, int] = Field(default=str(uuid4()), gt=0)
 
     @staticmethod
     def genre_split() -> str:
@@ -39,3 +40,5 @@ class Genre(BaseModel):
         if name.strip() == '':
             raise Exception('Genre cannot be empty')
         return name
+
+

@@ -1,9 +1,7 @@
 from PyQt6.QtWidgets import QCheckBox, QLineEdit
 from pydantic import BaseModel, ConfigDict
-
+from operator import eq
 from models.messageboxes import MyMessageBox
-
-
 class ErrorMessage:
     @staticmethod
     def movie_error_message() -> str:
@@ -20,7 +18,8 @@ class AddMovieFormValidation(BaseModel):
         self.txt_movie.clear()
 
     def is_valid(self) -> bool:
-        if self.txt_movie.text().strip() == '':
+
+        if eq(self.txt_movie.text().strip(), ''):
             MyMessageBox.show_message_box('Movie title is required!')
             return False
         if not self.__has_selected_genre():
@@ -30,3 +29,5 @@ class AddMovieFormValidation(BaseModel):
 
     def __has_selected_genre(self) -> bool:
         return any(list(filter(lambda checkbox: checkbox.isChecked(), self.checkbox_genres)))
+
+

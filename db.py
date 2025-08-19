@@ -3,10 +3,11 @@ from psycopg2 import connect
 from psycopg2.extras import DictCursor
 from config import load_config
 from models.genres import Genre, MovieGenre
-
+from  custom_validation import  Validation
 class Database:
 
     def add_movie_and_genres(self, title: str, genres: set[int]) -> None:
+        if not Validation.is_valid_movie(title, genres): return
         with connect(**load_config()) as conn, conn.cursor() as cur:
             cur.execute('CALL pr_add_movie_and_genres(%s,%s)', (title, str(genres)))
 
@@ -43,6 +44,8 @@ class Database:
             cursor.execute(f'DELETE FROM {table} WHERE {id_field} = %s;', ([num]))
 
     def add_movie_genres(self, movie_id: int, genre_id_list: set[int]) -> None:
+        if not Validation.is_valid_genre(genre_id_list):
+            raise Exception('Genre must be a set of integers!')
         with connect(**load_config()) as conn, conn.cursor() as cur:
             for genre_id in genre_id_list:
                 data: dict[str, int] = MovieGenre(movie_id=movie_id, genre_id=genre_id).model_dump()
@@ -52,3 +55,4 @@ class Database:
 
     def __field(self, name: str):
         return f'%({name})s'
+
